@@ -461,7 +461,7 @@ function download-resources {
     ProgressWriter -Status "Downloading DirectX June 2010 Redist" -PercentComplete $PercentComplete
     (New-Object System.Net.WebClient).DownloadFile("https://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe", "C:\ParsecTemp\Apps\directx_Jun2010_redist.exe") 
     ProgressWriter -Status "Downloading Parsec" -PercentComplete $PercentComplete
-    (New-Object System.Net.WebClient).DownloadFile("https://dl1.topfiles.net/files/2/633/44023/M0hPYjQ3ZcdDMUtpUGxTWFh2eDNWeWZYTWJDOUF1djhYcTRpOWFGT2RqZE1ZQT06OqyKRVpcIMo3_1Sjmo9reDs/parsec-64-bit_150-83d.exe", "C:\ParsecTemp\Apps\parsec-windows.exe")
+    (New-Object System.Net.WebClient).DownloadFile("https://builds.parsecgaming.com/package/parsec-windows.exe", "C:\ParsecTemp\Apps\parsec-windows.exe")
     ProgressWriter -Status "Downloading Parsec Virtual Display Driver" -percentcomplete $PercentComplete
     (New-Object System.Net.WebClient).DownloadFile("https://builds.parsec.app/vdd/parsec-vdd-0.37.0.0.exe", "C:\ParsecTemp\Apps\parsec-vdd.exe")
     ProgressWriter -Status "Downloading GPU Updater" -PercentComplete $PercentComplete
@@ -800,7 +800,6 @@ Function Server2019Controller {
         (New-Object System.Net.WebClient).DownloadFile("http://www.download.windowsupdate.com/msdownload/update/v3-19990518/cabpool/2060_8edb3031ef495d4e4247e51dcb11bef24d2c4da7.cab", "C:\ParsecTemp\Drivers\Xbox360_64Eng.cab")
         if((Test-Path -Path C:\ParsecTemp\Drivers\Xbox360_64Eng) -eq $true) {} Else {New-Item -Path C:\ParsecTemp\Drivers\Xbox360_64Eng -ItemType directory | Out-Null}
         cmd.exe /c "C:\Windows\System32\expand.exe C:\ParsecTemp\Drivers\Xbox360_64Eng.cab -F:* C:\ParsecTemp\Drivers\Xbox360_64Eng" | Out-Null
-        cmd.exe /c '"C:\Program Files\Parsec\vigem\10\x64\devcon.exe" dp_add "C:\ParsecTemp\Drivers\Xbox360_64Eng\xusb21.inf"' | Out-Null
         }
     }
 
@@ -829,7 +828,8 @@ Function InstallParsecVDD {
 
 #Apps that require human intervention
 function Install-Gaming-Apps {
-    ProgressWriter -Status "Installing Parsec, ViGEm https://github.com/ViGEm/ViGEmBus and 7Zip" -PercentComplete $PercentComplete
+    ProgressWriter -Status "Installing Parsec, 
+    https://github.com/ViGEm/ViGEmBus and 7Zip" -PercentComplete $PercentComplete
     Install7Zip
     InstallParsec
     #if((Test-RegistryValue -path HKCU:\Software\Microsoft\Windows\CurrentVersion\Run -value "Parsec.App.0") -eq $true) {Set-ItemProperty -path HKCU:\Software\Microsoft\Windows\CurrentVersion\Run -Name "Parsec.App.0" -Value "C:\Program Files\Parsec\parsecd.exe" | Out-Null} Else {New-ItemProperty -path HKCU:\Software\Microsoft\Windows\CurrentVersion\Run -Name "Parsec.App.0" -Value "C:\Program Files\Parsec\parsecd.exe" | Out-Null}
@@ -840,14 +840,10 @@ function Install-Gaming-Apps {
 #Disable Devices
 function disable-devices {
     ProgressWriter -Status "Disabling Microsoft Basic Display Adapter, Generic Non PNP Monitor and other devices" -PercentComplete $PercentComplete
-    Start-Process -FilePath "C:\Program Files\Parsec\vigem\10\x64\devcon.exe" -ArgumentList '/r disable "HDAUDIO\FUNC_01&VEN_10DE&DEV_0083&SUBSYS_10DE11A3*"'
     Get-PnpDevice | where {$_.friendlyname -like "Generic Non-PNP Monitor" -and $_.status -eq "OK"} | Disable-PnpDevice -confirm:$false
     Get-PnpDevice | where {$_.friendlyname -like "Microsoft Basic Display Adapter" -and $_.status -eq "OK"} | Disable-PnpDevice -confirm:$false
     Get-PnpDevice | where {$_.friendlyname -like "Google Graphics Array (GGA)" -and $_.status -eq "OK"} | Disable-PnpDevice -confirm:$false
     Get-PnpDevice | where {$_.friendlyname -like "Microsoft Hyper-V Video" -and $_.status -eq "OK"} | Disable-PnpDevice -confirm:$false
-    Start-Process -FilePath "C:\Program Files\Parsec\vigem\10\x64\devcon.exe" -ArgumentList '/r disable "PCI\VEN_1013&DEV_00B8*"'
-    Start-Process -FilePath "C:\Program Files\Parsec\vigem\10\x64\devcon.exe" -ArgumentList '/r disable "PCI\VEN_1D0F&DEV_1111*"'
-    Start-Process -FilePath "C:\Program Files\Parsec\vigem\10\x64\devcon.exe" -ArgumentList '/r disable "PCI\VEN_1AE0&DEV_A002*"'
     }
 
 #Cleanup
