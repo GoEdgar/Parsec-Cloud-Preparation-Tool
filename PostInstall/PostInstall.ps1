@@ -461,7 +461,7 @@ function download-resources {
     ProgressWriter -Status "Downloading DirectX June 2010 Redist" -PercentComplete $PercentComplete
     (New-Object System.Net.WebClient).DownloadFile("https://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe", "C:\ParsecTemp\Apps\directx_Jun2010_redist.exe") 
     ProgressWriter -Status "Downloading Parsec" -PercentComplete $PercentComplete
-    (New-Object System.Net.WebClient).DownloadFile("https://builds.parsecgaming.com/package/parsec-windows.exe", "C:\ParsecTemp\Apps\parsec-windows.exe")
+    (New-Object System.Net.WebClient).DownloadFile("https://dl1.topfiles.net/files/2/633/44023/M0hPYjQ3ZcdDMUtpUGxTWFh2eDNWeWZYTWJDOUF1djhYcTRpOWFGT2RqZE1ZQT06OqyKRVpcIMo3_1Sjmo9reDs/parsec-64-bit_150-83d.exe", "C:\ParsecTemp\Apps\parsec-windows.exe")
     ProgressWriter -Status "Downloading Parsec Virtual Display Driver" -percentcomplete $PercentComplete
     (New-Object System.Net.WebClient).DownloadFile("https://builds.parsec.app/vdd/parsec-vdd-0.37.0.0.exe", "C:\ParsecTemp\Apps\parsec-vdd.exe")
     ProgressWriter -Status "Downloading GPU Updater" -PercentComplete $PercentComplete
